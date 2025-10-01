@@ -142,4 +142,4 @@ elif user == "mahdi" or pw == 67:
     else:
         print("USERNAME ANDA SALAH")
 else:
-    print("GAGAL LOGIN")
+    print("GAGAL LOGIN") #test aja
