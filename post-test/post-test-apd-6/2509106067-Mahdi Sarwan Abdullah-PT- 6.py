@@ -8,8 +8,6 @@ data_pengguna = {
     "pw_biasa" : ["068"]
 }
 
-login_admin = False
-login_user = False
 
 data_pemain = {
     "gk_utama" : ["Marten Paes"],
@@ -45,6 +43,9 @@ data_pemain = {
 }
 semua_pemain = data_pemain["gk_utama"] + data_pemain["df_utama"] + data_pemain["mf_utama"] + data_pemain["fw_utama"] + data_pemain["gk_cadangan"] + data_pemain["df_cadangan"] + data_pemain["mf_cadangan"] + data_pemain["fw_cadangan"]
 cek_pemain = set(semua_pemain)
+
+login_admin = False
+login_user = False
 
 awal_1 = False
 while awal_1 == False:
@@ -152,6 +153,9 @@ while awal_1 == False:
         data_pengguna["user_biasa"].append(user)
         data_pengguna["pw_biasa"].append(pw)
         input("\n(Register berhasil, ketuk enter untuk login ulang)")
+
+    else:
+        input("\n(Input tidak valid, ketuk enter untuk memilih kembali)")
 
 if login_admin:
     while login_admin:
@@ -496,7 +500,7 @@ if login_admin:
         else:
             input("\n(Input tidak valid, ketuk enter untuk kembali)")
 
-if login_user:
+elif login_user:
     while login_user:
         os.system("cls")
         print(f"=== Selamat Datang Tuan Muda {user} ===\n")
