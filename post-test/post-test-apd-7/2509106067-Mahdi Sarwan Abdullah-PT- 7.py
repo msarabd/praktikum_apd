@@ -114,6 +114,31 @@ def input_admin():
         awal_1 = True
         break
 
+def user_register():
+    global data_pengguna
+
+    while True:
+        os.system("cls")
+        print("=== Menu Register ===\n")
+
+        try:
+            user = input("Masukkan username Anda = ").strip()
+            pw = input("Masukkan password Anda = ").strip()
+
+            if user == "" or pw == "":
+                raise ValueError("\n(Masukkan karakter, ketuk enter untuk kembali)")
+            elif user in data_pengguna["user_biasa"]:
+                raise ValueError("\n(Pengguna sudah ada, harap ganti username Anda)")
+        
+        except Exception as e:
+            input(e)
+            continue
+
+        data_pengguna["user_biasa"].append(user)
+        data_pengguna["pw_biasa"].append(pw)
+        input("\n(Register berhasil, ketuk enter untuk login ulang)")
+        break
+
 def tampil_starting():
     print("Starting:")
     for i in range(len(data_pemain["gk_utama"])):
@@ -361,31 +386,6 @@ while awal_1 == False:
         input_admin()
 
     elif pilihan_1 == "3":
-        def user_register():
-            global data_pengguna
-
-            while True:
-                os.system("cls")
-                print("=== Menu Register ===\n")
-
-                try:
-                    user = input("Masukkan username Anda = ").strip()
-                    pw = input("Masukkan password Anda = ").strip()
-
-                    if user == "" or pw == "":
-                        raise ValueError("\n(Masukkan karakter, ketuk enter untuk kembali)")
-                    elif user in data_pengguna["user_biasa"]:
-                        raise ValueError("\n(Pengguna sudah ada, harap ganti username Anda)")
-                
-                except Exception as e:
-                    input(e)
-                    continue
-
-                data_pengguna["user_biasa"].append(user)
-                data_pengguna["pw_biasa"].append(pw)
-                input("\n(Register berhasil, ketuk enter untuk login ulang)")
-                break
-        
         user_register()
 
     else:
