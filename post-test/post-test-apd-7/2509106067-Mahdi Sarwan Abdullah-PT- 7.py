@@ -46,6 +46,74 @@ cek_pemain = set(semua_pemain)
 login_admin = False
 login_user = False
 
+def input_user():
+    global awal_1
+    global login_user
+    global user
+
+    ulang_1 = False
+    while ulang_1 == False:
+        awal_1 = False
+        os.system("cls")
+        print("=== Login Sebagai User Biasa ===\n")
+        
+        try:
+            user = input("Masukkan username Anda = ").strip()
+            pw = input("Masukkan password Anda = ").strip()
+
+            if user == "" or pw == "":
+                raise ValueError("\n(Masukkan karakter, tekan enter untuk login kembali)")
+                
+            for i in range(len(data_pengguna["user_biasa"])):
+                if user == data_pengguna["user_biasa"][i] and pw == data_pengguna["pw_biasa"][i]:
+                    input("\n(Login berhasil, ketuk enter untuk lanjut)")
+                    login_user = True
+                    ulang_1 = True
+                    awal_1 = True
+                    break
+                elif user == data_pengguna["user_biasa"][i]: 
+                    awal_1 = True
+                    raise ValueError("\n(Password salah, ketuk enter untuk kembali)")
+                
+            if awal_1 == False:
+                raise ValueError("\n(User tidak ditemukan, ketuk enter untuk login kembali)")
+        
+        except Exception as e:
+            input(e)
+            continue
+
+def input_admin():
+    global user
+    global login_admin
+    global awal_1
+
+    while True:
+        os.system("cls")
+        print("=== Login Sebagai Admin ===\n")
+
+        try:
+            user = input("Masukkan username Anda = ").strip()
+            pw = input("Masukkan password Anda = ").strip()
+
+            if user != data_pengguna["user_admin"][0] or pw != data_pengguna["pw_admin"][0]:
+                if user == "" or pw == "":
+                    raise ValueError("\n(Masukkan karakter, ketuk enter untuk kembali)")
+                elif user == data_pengguna["user_admin"][0]:
+                    raise ValueError("\n(Password salah, ketuk enter untuk kembali)")
+                elif pw == data_pengguna["pw_admin"][0]:
+                    raise ValueError("\n(Username salah, ketuk enter untuk kembali)")
+                else:
+                    raise ValueError("\n(Username dan password salah, ketuk enter untuk kembali)")
+    
+        except Exception as e:
+            input(e)
+            continue
+    
+        input("\n(Login berhasil, ketuk enter untuk lanjut)")
+        login_admin = True
+        awal_1 = True
+        break
+
 def tampil_starting():
     print("Starting:")
     for i in range(len(data_pemain["gk_utama"])):
@@ -72,187 +140,193 @@ def tambah_pemain():
     global data_pemain
     global semua_pemain
     global cek_pemain
-    global ulang_2
     
     os.system("cls")
     tampil_starting()
     print()
     tampil_cadangan()
-    pemain_tambahan = input("\nMasukkan nama pemain = ").strip()
+    try:
+        pemain_tambahan = input("\nMasukkan nama pemain = ").strip()
 
-    if pemain_tambahan == "":
-        input("\n(Masukkan karakter, ketuk enter untuk kembali)")
-        return tambah_pemain()
-    elif pemain_tambahan in cek_pemain:
-        input("\n(Pemain sudah ada di line up, ketuk enter untuk menambah kembali)")
-        return tambah_pemain()
+        if pemain_tambahan == "":
+            raise ValueError("\n(Masukkan karakter, ketuk enter untuk kembali)")
+        elif pemain_tambahan in cek_pemain:
+            raise ValueError("\n(Pemain sudah ada di line up, ketuk enter untuk menambah kembali)") # butuh perbaikan ini
 
-    pilihan_3 = input("Pilih lini yang ingin ditambah (GK/DF/MF/FW) = ").strip().upper()
-    if pilihan_3 == "GK":
-        data_pemain["gk_cadangan"].append(pemain_tambahan)
-    elif pilihan_3 == "DF":
-        data_pemain["df_cadangan"].append(pemain_tambahan)
-    elif pilihan_3 == "MF":
-        data_pemain["mf_cadangan"].append(pemain_tambahan)
-    elif pilihan_3 == "FW":
-        data_pemain["fw_cadangan"].append(pemain_tambahan) 
-    else:
-        input("\n(Input tidak valid, ketuk enter untuk kembali)")
-        return tambah_pemain()
+        pilihan_3 = input("Pilih lini yang ingin ditambah (GK/DF/MF/FW) = ").strip().upper()
+        if pilihan_3 == "GK":
+            data_pemain["gk_cadangan"].append(pemain_tambahan)
+        elif pilihan_3 == "DF":
+            data_pemain["df_cadangan"].append(pemain_tambahan)
+        elif pilihan_3 == "MF":
+            data_pemain["mf_cadangan"].append(pemain_tambahan)
+        elif pilihan_3 == "FW":
+            data_pemain["fw_cadangan"].append(pemain_tambahan) 
+        else:
+            raise ValueError("\n(Input tidak valid, ketuk enter untuk kembali)")
     
+    except Exception as e:
+        input(e)
+        return tambah_pemain()
+
     print(f"(Sukses menambahkan {pemain_tambahan} ke dalam lini {pilihan_3})")
     input("\n(Ketuk enter untuk kembali memilih menu)")
     semua_pemain = data_pemain["gk_utama"] + data_pemain["df_utama"] + data_pemain["mf_utama"] + data_pemain["fw_utama"] + data_pemain["gk_cadangan"] + data_pemain["df_cadangan"] + data_pemain["mf_cadangan"] + data_pemain["fw_cadangan"]
     cek_pemain = set(semua_pemain)
 
 def ganti_pemain(gk_status, df_status, mf_status, fw_status):
+    global pemain_tukar
     global data_pemain
     global ulang_2
+    
+    ulang_2 = False
+    os.system("cls")
 
-    if pemain_tukar == "":
-        input("\n(Masukkan karakter, ketuk enter untuk memilih kembali)")
+    if pilihan_2 == "3":
+        tampil_starting()
+    else:
+        tampil_cadangan()
+
+    try:
+        pemain_tukar = input("\nMasukkan nama pemain = ").strip()
+
+        if pemain_tukar == "":
+            raise ValueError("\n(Masukkan karakter, ketuk enter untuk kembali)")
+        elif pemain_tukar in cek_pemain:
+            raise ValueError("\n(Pemain sudah ada di line up, ketuk enter untuk menambah kembali)")
+
+        pilihan_3 = input("Pilih lini yang ingin diganti (GK/DF/MF/FW) = ").strip().upper()
+        if pilihan_3 == "GK":
+            for i in range(len(data_pemain[gk_status])):
+                print(f"    {i+1}. {data_pemain[gk_status][i]} (GK)")
+            pemain = input("\nMasukkan angka pemain yang ingin diganti = ").strip()
+            if not pemain.isdigit():
+                raise ValueError("\n(Masukkan input berupa angka, ketuk enter untuk kembali)")
+            pemain_diganti = int(pemain) - 1
+            if pemain_diganti > len(data_pemain[gk_status]) - 1 or pemain_diganti < 0:
+                raise IndexError("\n(Pemain tidak ditemukan, ketuk enter untuk kembali)")
+            else:
+                data_pemain[gk_status][pemain_diganti] = pemain_tukar
+                ulang_2 = True
+                return pemain_tukar
+        elif pilihan_3 == "DF":
+            for i in range(len(data_pemain[df_status])):
+                print(f"    {i+1}. {data_pemain[df_status][i]} (DF)")
+            pemain = input("\nMasukkan angka pemain yang ingin diganti = ").strip()
+            if not pemain.isdigit():
+                raise ValueError("\n(Masukkan input berupa angka, ketuk enter untuk kembali)")
+            pemain_diganti = int(pemain) - 1
+            if pemain_diganti > len(data_pemain[df_status]) - 1 or pemain_diganti < 0:
+                raise IndexError("\n(Pemain tidak ditemukan, ketuk enter untuk kembali)")
+            else:
+                data_pemain[df_status][pemain_diganti] = pemain_tukar
+                ulang_2 = True
+                return pemain_tukar
+        elif pilihan_3 == "MF":
+            for i in range(len(data_pemain[mf_status])):
+                print(f"    {i+1}. {data_pemain[mf_status][i]} (MF)")
+            pemain = input("\nMasukkan angka pemain yang ingin diganti = ").strip()
+            if not pemain.isdigit():
+                raise ValueError("\n(Masukkan input berupa angka, ketuk enter untuk kembali)")
+            pemain_diganti = int(pemain) - 1
+            if pemain_diganti > len(data_pemain[mf_status]) - 1 or pemain_diganti < 0:
+                raise IndexError("\n(Pemain tidak ditemukan, ketuk enter untuk kembali)")
+            else:
+                data_pemain[mf_status][pemain_diganti] = pemain_tukar
+                ulang_2 = True
+                return pemain_tukar
+        elif pilihan_3 == "FW":
+            for i in range(len(data_pemain[fw_status])):
+                print(f"    {i+1}. {data_pemain[fw_status][i]} (FW)")
+            pemain = input("\nMasukkan angka pemain yang ingin diganti = ").strip()
+            if not pemain.isdigit():
+                raise ValueError("\n(Masukkan input berupa angka, ketuk enter untuk kembali)")
+            pemain_diganti = int(pemain) - 1
+            if pemain_diganti > len(data_pemain[fw_status]) - 1 or pemain_diganti < 0:
+                raise IndexError("\n(Pemain tidak ditemukan, ketuk enter untuk kembali)")
+            else:
+                data_pemain[fw_status][pemain_diganti] = pemain_tukar
+                ulang_2 = True
+                return pemain_tukar
+        else:
+            raise ValueError("\n(Input tidak valid, ketuk enter untuk kembali)")
+    
+    except Exception as e:
+        input(e)
         return
     
-    elif pemain_tukar in cek_pemain:
-        input("\n(Pemain sudah ada di line up, ketuk enter untuk menambah kembali)")
-        return
-
-    pilihan_3 = input("Pilih lini yang ingin diganti (GK/DF/MF/FW) = ").strip().upper()
-    if pilihan_3 == "GK":
-        for i in range(len(data_pemain[gk_status])):
-            print(f"    {i+1}. {data_pemain[gk_status][i]} (GK)")
-        pemain = input("\nMasukkan angka pemain yang ingin diganti = ").strip()
-        if not pemain.isdigit():
-            input("\n(Input tidak valid, ketuk enter untuk kembali)")
-            return
-        pemain_diganti = int(pemain) - 1
-        if pemain_diganti > len(data_pemain[gk_status]) - 1 or pemain_diganti < 0:
-            input("\n(Pemain tidak ditemukan, ketuk enter untuk kembali)")
-            return
-        else:
-            data_pemain[gk_status][pemain_diganti] = pemain_tukar
-            ulang_2 = True
-            return
-    elif pilihan_3 == "DF":
-        for i in range(len(data_pemain[df_status])):
-            print(f"    {i+1}. {data_pemain[df_status][i]} (DF)")
-        pemain = input("\nMasukkan angka pemain yang ingin diganti = ").strip()
-        if not pemain.isdigit():
-            input("\n(Input tidak valid, ketuk enter untuk kembali)")
-            return
-        pemain_diganti = int(pemain) - 1
-        if pemain_diganti > len(data_pemain[df_status]) - 1 or pemain_diganti < 0:
-            input("\n(Pemain tidak ditemukan, ketuk enter untuk kembali)")
-            return
-        else:
-            data_pemain[df_status][pemain_diganti] = pemain_tukar
-            ulang_2 = True
-            return
-    elif pilihan_3 == "MF":
-        for i in range(len(data_pemain[mf_status])):
-            print(f"    {i+1}. {data_pemain[mf_status][i]} (MF)")
-        pemain = input("\nMasukkan angka pemain yang ingin diganti = ").strip()
-        if not pemain.isdigit():
-            input("\n(Input tidak valid, ketuk enter untuk kembali)")
-            return
-        pemain_diganti = int(pemain) - 1
-        if pemain_diganti > len(data_pemain[mf_status]) - 1 or pemain_diganti < 0:
-            input("\n(Pemain tidak ditemukan, ketuk enter untuk kembali)")
-            return
-        else:
-            data_pemain[mf_status][pemain_diganti] = pemain_tukar
-            ulang_2 = True
-            return
-    elif pilihan_3 == "FW":
-        for i in range(len(data_pemain[fw_status])):
-            print(f"    {i+1}. {data_pemain[fw_status][i]} (FW)")
-        pemain = input("\nMasukkan angka pemain yang ingin diganti = ").strip()
-        if not pemain.isdigit():
-            input("\n(Input tidak valid, ketuk enter untuk kembali)")
-            return
-        pemain_diganti = int(pemain) - 1
-        if pemain_diganti > len(data_pemain[fw_status]) - 1 or pemain_diganti < 0:
-            input("\n(Pemain tidak ditemukan, ketuk enter untuk kembali)")
-            return
-        else:
-            data_pemain[fw_status][pemain_diganti] = pemain_tukar
-            ulang_2 = True
-            return
-    else:
-        input("\n(Input tidak valid, ketuk enter untuk kembali)")
-        return
-
 def hapus_pemain():
     global data_pemain
     global ulang_2
     global panggil_pemain
 
-    if pilihan_3 == "GK":
-        for i in range(len(data_pemain["gk_cadangan"])):
-            print(f"    {i+1}. {data_pemain["gk_cadangan"][i]} (GK)")
-        pemain = input("\nMasukkan angka pemain yang ingin dihapus = ").strip()
-        if not pemain.isdigit():
-            input("\n(Input tidak valid, ketuk enter untuk kembali)")
-            return
-        pemain_dihapus = int(pemain) -1 
-        if pemain_dihapus > len(data_pemain["gk_cadangan"]) -1 or pemain_dihapus < 0:
-            input("\n(Pemain tidak ditemukan, ketuk enter untuk kembali)")
-            return
+    ulang_2 = False
+    os.system("cls")
+    tampil_cadangan()
+    try:
+        pilihan_3 = input("\nPilih lini yang ingin dihapus (GK/DF/MF/FW) = ").strip().upper()
+
+        if pilihan_3 == "GK":
+            for i in range(len(data_pemain["gk_cadangan"])):
+                print(f"    {i+1}. {data_pemain["gk_cadangan"][i]} (GK)")
+            pemain = input("\nMasukkan angka pemain yang ingin dihapus = ").strip()
+            if not pemain.isdigit():
+                raise ValueError("\n(Masukkan input berupa angka, ketuk enter untuk kembali)")
+            pemain_dihapus = int(pemain) -1 
+            if pemain_dihapus > len(data_pemain["gk_cadangan"]) -1 or pemain_dihapus < 0:
+                raise IndexError("\n(Pemain tidak ditemukan, ketuk enter untuk kembali)")
+            else:
+                panggil_pemain = data_pemain["gk_cadangan"][pemain_dihapus]
+                del data_pemain["gk_cadangan"][pemain_dihapus]
+                ulang_2 = True
+                return
+        elif pilihan_3 == "DF":
+            for i in range(len(data_pemain["df_cadangan"])):
+                print(f"    {i+1}. {data_pemain["df_cadangan"][i]} DF)")
+            pemain = input("\nMasukkan angka pemain yang ingin dihapus = ").strip()
+            if not pemain.isdigit():
+                raise ValueError("\n(Masukkan input berupa angka, ketuk enter untuk kembali)")
+            pemain_dihapus = int(pemain) -1
+            if pemain_dihapus > len(data_pemain["df_cadangan"]) -1 or pemain_dihapus < 0:
+                raise IndexError("\n(Pemain tidak ditemukan, ketuk enter untuk kembali)")
+            else:
+                panggil_pemain = data_pemain["df_cadangan"][pemain_dihapus]
+                del data_pemain["df_cadangan"][pemain_dihapus]
+                ulang_2 = True
+                return
+        elif pilihan_3 == "MF":
+            for i in range(len(data_pemain["mf_cadangan"])):
+                print(f"    {i+1}. {data_pemain["mf_cadangan"][i]} (MF)")
+            pemain = input("\nMasukkan angka pemain yang ingin dihapus = ").strip()
+            if not pemain.isdigit():
+                raise ValueError("\n(Masukkan input berupa angka, ketuk enter untuk kembali)")
+            pemain_dihapus = int(pemain) -1
+            if pemain_dihapus > len(data_pemain["mf_cadangan"]) -1 or pemain_dihapus < 0:
+                raise IndexError("\n(Pemain tidak ditemukan, ketuk enter untuk kembali)")
+            else:
+                panggil_pemain = data_pemain["mf_cadangan"][pemain_dihapus]
+                del data_pemain["mf_cadangan"][pemain_dihapus]
+                ulang_2 = True
+                return
+        elif pilihan_3 == "FW":
+            for i in range(len(data_pemain["fw_cadangan"])):
+                print(f"    {i+1}. {data_pemain["fw_cadangan"][i]} (FW)")
+            pemain = input("\nMasukkan angka pemain yang ingin dihapus = ").strip()
+            if not pemain.isdigit():
+                raise ValueError("\n(Masukkan input berupa angka, ketuk enter untuk kembali)")
+            pemain_dihapus = int(pemain) -1
+            if pemain_dihapus > len(data_pemain["fw_cadangan"]) -1 or pemain_dihapus < 0:
+                raise IndexError("\n(Pemain tidak ditemukan, ketuk enter untuk kembali)")
+            else:
+                panggil_pemain = data_pemain["fw_cadangan"][pemain_dihapus]
+                del data_pemain["fw_cadangan"][pemain_dihapus]
+                ulang_2 = True
+                return 
         else:
-            panggil_pemain = data_pemain["gk_cadangan"][pemain_dihapus]
-            del data_pemain["gk_cadangan"][pemain_dihapus]
-            ulang_2 = True
-            return
-    elif pilihan_3 == "DF":
-        for i in range(len(data_pemain["df_cadangan"])):
-            print(f"    {i+1}. {data_pemain["df_cadangan"][i]} DF)")
-        pemain = input("\nMasukkan angka pemain yang ingin dihapus = ").strip()
-        if not pemain.isdigit():
-            input("\n(Input tidak valid, ketuk enter untuk kembali)")
-            return
-        pemain_dihapus = int(pemain) -1
-        if pemain_dihapus > len(data_pemain["df_cadangan"]) -1 or pemain_dihapus < 0:
-            input("\n(Pemain tidak ditemukan, ketuk enter untuk kembali)")
-            return
-        else:
-            panggil_pemain = data_pemain["df_cadangan"][pemain_dihapus]
-            del data_pemain["df_cadangan"][pemain_dihapus]
-            ulang_2 = True
-            return
-    elif pilihan_3 == "MF":
-        for i in range(len(data_pemain["mf_cadangan"])):
-            print(f"    {i+1}. {data_pemain["mf_cadangan"][i]} (MF)")
-        pemain = input("\nMasukkan angka pemain yang ingin dihapus = ").strip()
-        if not pemain.isdigit():
-            input("\n(Input tidak valid, ketuk enter untuk kembali)")
-            return
-        pemain_dihapus = int(pemain) -1
-        if pemain_dihapus > len(data_pemain["mf_cadangan"]) -1 or pemain_dihapus < 0:
-            input("\n(Pemain tidak ditemukan, ketuk enter untuk kembali)")
-            return
-        else:
-            panggil_pemain = data_pemain["mf_cadangan"][pemain_dihapus]
-            del data_pemain["mf_cadangan"][pemain_dihapus]
-            ulang_2 = True
-            return
-    elif pilihan_3 == "FW":
-        for i in range(len(data_pemain["fw_cadangan"])):
-            print(f"    {i+1}. {data_pemain["fw_cadangan"][i]} (FW)")
-        pemain = input("\nMasukkan angka pemain yang ingin dihapus = ").strip()
-        if not pemain.isdigit():
-            input("\n(Input tidak valid, ketuk enter untuk kembali)")
-            return
-        pemain_dihapus = int(pemain) -1
-        if pemain_dihapus > len(data_pemain["fw_cadangan"]) -1 or pemain_dihapus < 0:
-            input("\n(Pemain tidak ditemukan, ketuk enter untuk kembali)")
-            return
-        else:
-            panggil_pemain = data_pemain["fw_cadangan"][pemain_dihapus]
-            del data_pemain["fw_cadangan"][pemain_dihapus]
-            ulang_2 = True
-            return 
-    else:
-        input("\n(Input tidak valid, ketuk enter untuk kembali)")
+            raise ValueError("\n(Input tidak valid, ketuk enter untuk kembali)")
+    
+    except Exception as e:
+        input(e)
         return
 
 def tampilan_ubah_pemain(par_pemain, pesan):
@@ -279,80 +353,40 @@ while awal_1 == False:
     elif not pilihan_1.isdigit() or pilihan_1 == "0":
         input("\n(Masukkan angka sesuai pilihan, ketuk enter untuk memilih kembali)")
         continue
-
+    
     elif pilihan_1 == "1":
-        ulang_1 = False
-        while ulang_1 == False:
-            awal_1 = False
-            os.system("cls")
-            print("=== Login Sebagai User Biasa ===\n")
-            user = input("Masukkan username Anda = ").strip()
-            pw = input("Masukkan password Anda = ").strip()
-
-            if user == "" or pw == "":
-                input("\n(Masukkan karakter, tekan enter untuk login kembali)")
-                continue
-
-            for i in range(len(data_pengguna["user_biasa"])):
-                if user == data_pengguna["user_biasa"][i] and pw == data_pengguna["pw_biasa"][i]:
-                    input("\n(Login berhasil, ketuk enter untuk lanjut)")
-                    login_user = True
-                    ulang_1 = True
-                    awal_1 = True
-                    break
-                elif user == data_pengguna["user_biasa"][i] or pw == data_pengguna["pw_biasa"][i]:
-                    if user == data_pengguna["user_biasa"][i]:
-                        awal_1 = True
-                        input("\n(Hanya password yang salah, ketuk enter untuk kembali)")
-                        break
-                
-            if awal_1 == False:
-                input("\n(User tidak ditemukan, ketuk enter untuk login kembali)")
+        input_user()
 
     elif pilihan_1 == "2":
-        while True:
-            os.system("cls")
-            print("=== Login Sebagai Admin ===\n")
-            user = input("Masukkan username Anda = ").strip()
-            pw = input("Masukkan password Anda = ").strip()
-
-            if user != data_pengguna["user_admin"][0] or pw != data_pengguna["pw_admin"][0]:
-                if user == "" or pw == "":
-                    input("\n(Masukkan karakter, ketuk enter untuk kembali)")
-                    continue
-                elif user == data_pengguna["user_admin"][0]:
-                    input("\n(Hanya password yang salah, ketuk enter untuk kembali)")
-                    continue
-                elif pw == data_pengguna["pw_admin"][0]:
-                    input("\n(Hanya username yang salah, ketuk enter untuk kembali)")
-                    continue
-                else:
-                    input("\n(Username dan password Anda salah, ketuk enter untuk kembali)")
-                    continue
-                
-            input("\n(Login berhasil, ketuk enter untuk lanjut)")
-            login_admin = True
-            awal_1 = True
-            break
+        input_admin()
 
     elif pilihan_1 == "3":
-        while True:
-            os.system("cls")
-            print("=== Menu Register ===\n")
-            user = input("Masukkan username Anda = ").strip()
-            pw = input("Masukkan password Anda = ").strip()
+        def user_register():
+            global data_pengguna
 
-            if user == "" or pw == "":
-                input("\n(Masukkan karakter, ketuk enter untuk kembali)")
-                continue
-            elif user in data_pengguna["user_biasa"]:
-                input("\n(Pengguna sudah ada, harap ganti username Anda)")
-                continue
-            
-            data_pengguna["user_biasa"].append(user)
-            data_pengguna["pw_biasa"].append(pw)
-            input("\n(Register berhasil, ketuk enter untuk login ulang)")
-            break
+            while True:
+                os.system("cls")
+                print("=== Menu Register ===\n")
+
+                try:
+                    user = input("Masukkan username Anda = ").strip()
+                    pw = input("Masukkan password Anda = ").strip()
+
+                    if user == "" or pw == "":
+                        raise ValueError("\n(Masukkan karakter, ketuk enter untuk kembali)")
+                    elif user in data_pengguna["user_biasa"]:
+                        raise ValueError("\n(Pengguna sudah ada, harap ganti username Anda)")
+                
+                except Exception as e:
+                    input(e)
+                    continue
+
+                data_pengguna["user_biasa"].append(user)
+                data_pengguna["pw_biasa"].append(pw)
+                input("\n(Register berhasil, ketuk enter untuk login ulang)")
+                break
+        
+        user_register()
 
     else:
         input("\n(Input tidak valid, ketuk enter untuk memilih kembali)")
@@ -362,12 +396,12 @@ if login_admin:
         os.system("cls")
         print("=== Selamat Datang Tuan Admin ===\n")
         print("""Mau ngapain hari ini?
-[1] Lihat Daftar Line Up
-[2] Tambah Pemain Cadangan
-[3] Ganti Starting Line Up
-[4] Ganti Pemain Cadangan
-[5] Hapus Pemain Cadangan
-[6] Keluar""")
+    [1] Lihat Daftar Line Up
+    [2] Tambah Pemain Cadangan
+    [3] Ganti Starting Line Up
+    [4] Ganti Pemain Cadangan
+    [5] Hapus Pemain Cadangan
+    [6] Keluar""")
         pilihan_2 = input("Pilih menu (1-6) = ").strip()
         
         if pilihan_2 == "1":
@@ -383,11 +417,6 @@ if login_admin:
 
         elif pilihan_2 == "3":
             while True:
-                ulang_2 = False
-                os.system("cls")
-                tampil_starting()
-                pemain_tukar = input("\nMasukkan nama pemain = ").strip()
-                
                 ganti_pemain("gk_utama", "df_utama", "mf_utama", "fw_utama")
                 if ulang_2 == True:
                     break
@@ -396,11 +425,6 @@ if login_admin:
                 
         elif pilihan_2 == "4":
             while True:
-                ulang_2 = False
-                os.system("cls")
-                tampil_cadangan()
-                pemain_tukar = input("\nMasukkan nama pemain = ").strip()
-
                 ganti_pemain("gk_cadangan", "df_cadangan", "mf_cadangan", "fw_cadangan")
                 if ulang_2 == True:
                     break
@@ -409,12 +433,6 @@ if login_admin:
                 
         elif pilihan_2 == "5":
             while True:
-                ulang_2 = False
-                panggil_pemain = None
-                os.system("cls")
-                tampil_cadangan()
-                pilihan_3 = input("\nPilih lini yang ingin dihapus (GK/DF/MF/FW) = ").strip().upper()
-
                 hapus_pemain()
                 if ulang_2 == True:
                     break
@@ -432,8 +450,8 @@ elif login_user:
         os.system("cls")
         print(f"=== Selamat Datang Tuan Muda {user} ===\n")
         print("""Mau ngapain hari ini?
-[1] Lihat Daftar Line Up
-[2] Keluar""")
+    [1] Lihat Daftar Line Up
+    [2] Keluar""")
         pilihan_2 = input("Pilih menu (1-2) = ").strip()
         
         if pilihan_2 == "1":
